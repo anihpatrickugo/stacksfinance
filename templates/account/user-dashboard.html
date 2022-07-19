@@ -1,0 +1,327 @@
+{% extends "core/index.html" %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>{% block tittle %}Dashboard - {{ request.user.username }} {% endblock %}</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  
+  
+  {% block googlefonts %}
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  {% endblock %}
+  
+ 
+  
+  <!-- Template Main CSS File -->
+  {% block maincss %}
+  <link href="{% static 'core/css/style-dashboard.css' %}" rel="stylesheet">
+  {% endblock %}
+
+
+</head>
+
+<body>
+  {% block body %}
+  <!-- ======= Header ======= -->
+  {% include "core/header2.html" %}
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'dashboard' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'deposits' %}">
+          <i class="bi bi-person"></i>
+          <span>Deposits</span>
+        </a>
+        
+       
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'withdrawals' %}">
+          <i class="bi bi-person"></i>
+          <span>Withdrawals</span>
+        </a>
+       
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'investments' %}">
+          <i class="bi bi-person"></i>
+          <span>Investments</span>
+        </a>
+       
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Refferals</span>
+        </a>
+       
+      </li><!-- End Components Nav -->
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'user-profile' %}">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'account_logout' %}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+      
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+
+  {% block content %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+       <!-- Customers Card -->
+       <div class="col-xxl-4 col-xl-12">
+
+        <div class="card info-card customers-card">
+
+          
+
+          <div class="card-body">
+            <h5 class="card-title">Account Balance</h5>
+
+            <div class="d-flex align-items-center">
+              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-currency-dollar"></i>
+              </div>
+              <div class="ps-3">
+                <h6>${{ request.user.balance}}</h6>
+                <span class="text-muted small pt-2 ps-1">Dollars</span>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- End Customers Card -->
+
+      <div class="row">
+
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+               
+
+                <div class="card-body">
+                  <h5 class="card-title">Deposits <span>| Approved</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-bank"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>145</h6>
+                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                
+
+                <div class="card-body">
+                  <h5 class="card-title">Withdrawal <span>| Approved</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                
+
+                <div class="card-body">
+                  <h5 class="card-title">Investments <span>| Approved</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-bitcoin"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>145</h6>
+                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                
+
+                <div class="card-body">
+                  <h5 class="card-title">Referrals <span>| Approved</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+           
+
+            <!-- Cryptocurrency prices -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                  <h5 class="card-title">Cryptocurrency Prices <span>| Today</span></h5>
+
+                  <script src="https://widgets.coingecko.com/coingecko-coin-list-widget.js"></script>
+                  <coingecko-coin-list-widget  coin-ids="bitcoin,ethereum,eos,ripple,litecoin" currency="usd" locale="en"></coingecko-coin-list-widget>          
+
+                </div>
+
+              </div>
+            </div><!-- End Cryptocurrency prices -->
+
+            <!-- Cryptocurrency prices -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                  <h5 class="card-title">Bitcoin Converter <span>| Today</span></h5>
+
+                  <script src="https://widgets.coingecko.com/coingecko-coin-converter-widget.js"></script>
+                  <coingecko-coin-converter-widget  coin-id="bitcoin" currency="usd" background-color="#ffffff" font-color="#4c4c4c" locale="en"></coingecko-coin-converter-widget>
+
+                </div>
+
+              </div>
+            </div><!-- End Cryptocurrency prices -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+          <!-- News & Updates Traffic -->
+          <div class="card">
+            
+
+            <rssapp-feed id="tfR8YZRqWS8pBWzN"></rssapp-feed><script src="https://widget.rss.app/v1/feed.js" type="text/javascript" async></script>
+          </div><!-- End News & Updates -->
+
+        </div><!-- End Right side columns -->
+
+      </div>
+    </section>
+
+   
+
+  </main><!-- End #main -->
+  {% endblock %}
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    {% include 'core/footer2.html' %}
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  
+   <!-- Template Main JS File -->
+   {% block mainjavascript %}
+   <script src="{% static 'core/js/main-dashboard.js' %}"></script>
+   {% endblock %}
+ 
+ 
+
+
+  {% endblock %}
+
+</body>
+
+</html>

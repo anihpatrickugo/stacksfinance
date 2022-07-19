@@ -1,0 +1,2 @@
+mailjet_rest
+django>=1.8

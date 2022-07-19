@@ -1,0 +1,111 @@
+{% extends 'account/user-dashboard.html' %}
+<html lang="en">
+
+
+{% block content %}
+  <main id="main" class="main">
+
+    <section class="section">
+
+
+      <div class="row">
+
+        {% if deposit_list %}
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Your Deposits</h5>
+
+              <!-- Table with stripped rows -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Hash Code</th>
+                    <th scope="col">Verified</th>
+                    <th scope="col">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for deposit in deposit_list %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>${{ deposit.amount }}</td>
+                    <td>{{ deposit.trnx_hash }}</td>
+                    <td>{% if deposit.verified %}<span class="badge bg-success">Verified</span>{% else %}<span class="badge bg-danger">Pending</span>{% endif %}</td>
+                    <td>{{ deposit.date }}</td>
+                  </tr>
+                  {% endfor %}
+                  
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+                
+              {% if is_paginated %}
+              <!-- pagination start -->
+              <nav aria-label="...">
+                <ul class="pagination">
+                  {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number}}" aria-label="Previous">Previous</a>
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </li>
+                  {% endif %}
+
+                  
+                  <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+                    
+                  </li>
+                  
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number}}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                    </a>
+
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav><!-- End pagination -->
+              {% endif %}
+
+            </div>
+            
+          </div>
+
+        </div>
+        {% else %}
+        <div class="col-lg-12 ">
+          <div class="info-box card align-items-center">
+            <h3>You have no deposits yet</h3>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="d-grid gap-2 mt-3">
+                <a href="{% url 'new-deposit' %}" class="btn btn-success" type="button">Make A New Deposit >>></a>
+              </div>
+
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}
+
