@@ -1,11 +1,10 @@
-from audioop import reverse
 from django.contrib import admin
-from django.forms import ValidationError
 from django.contrib import messages
-from django.shortcuts import redirect, render
+
 
 from.models import (
     Profile, 
+    Referrals, 
     Deposit, 
     Withdrawal, 
     Plan, 
@@ -47,6 +46,7 @@ class InvestmentAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Profile)
+admin.site.register(Referrals)
 admin.site.register(Deposit)
 admin.site.register(Withdrawal)
 admin.site.register(Plan)

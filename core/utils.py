@@ -1,5 +1,6 @@
 import requests
 import json
+import uuid
 
 
 def get_crypto_price():
@@ -16,3 +17,11 @@ def get_crypto_price():
 
     except:
         pass
+
+
+
+def generate_ref_code():
+    code = str(uuid.uuid4()).replace("-", "")[:6]
+    return code
+
+

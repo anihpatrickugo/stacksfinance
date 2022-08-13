@@ -1,16 +1,17 @@
-import datetime
-import uuid
-import base64
 
-from requests import request
-from operator import truediv
+import datetime
+
+from django_countries.fields import CountryField
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.contrib import messages
+from django.conf import settings
+from django.urls import reverse
 
-# from django.utils.translation import ugettext_lazy as _
+
 
 
 
@@ -22,19 +23,23 @@ class Profile(AbstractUser):
     bitcoin_address = models.CharField(max_length=40)
     photo           = models.ImageField(upload_to='profile_photos', null=True, blank=True)
     balance         = models.PositiveIntegerField(default=0)
-    code            = models.CharField(max_length=6, blank=True, null=True)
-    recommended_by  = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    nationality     = CountryField(blank_label='select country')
+    referral_code   = models.CharField(max_length=6, unique=True, blank=True, null=True)
 
+    
+   
 
-    # def generate_verification_code(self):
-    #     return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:6]
+class Referrals(models.Model):
+    referred_by =  models.ForeignKey(Profile, on_delete=models.CASCADE)
+    referred    =  models.OneToOneField(Profile, related_name='owner', on_delete=models.CASCADE)
+    paid        =  models.BooleanField(default=False)
+    date        =  models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'referral'
 
-    def save(self, *args, **kwargs):
-        if self.code:
-          pass
-
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.referred_by} referring {self.referred}"
 
 
 class Deposit(models.Model):
@@ -53,7 +58,7 @@ class Deposit(models.Model):
 
 class Withdrawal(models.Model):
     user             =   models.ForeignKey(Profile, on_delete=models.CASCADE)
-    amount           =   models.IntegerField(default=0)
+    amount           =   models.IntegerField(default=0, validators=[MinValueValidator(settings.MINIMUM_WITHDRAWAL_AMAOUNT)])
     verified         =   models.BooleanField(default=False)  
     date             =   models.DateTimeField(auto_now_add=True)
     
@@ -61,14 +66,6 @@ class Withdrawal(models.Model):
 
     def __str__(self):
         return f"{self.user} withdrawal of ${self.amount}"
-
-
-
-    # def clean(self):
-    #     if (self.amount > self.user.balance):
-    #         raise ValidationError('insufficient account balance for this withdrawal')
-        
-    #     super(Investment, self).clean()
 
   
             
@@ -79,11 +76,17 @@ class Plan(models.Model):
     name       = models.CharField(max_length=50)
     intrest    = models.IntegerField()
     min_amount = models.IntegerField()
-    max_amount = models.IntegerField()
+    max_amount = models.IntegerField(null=True, blank=True)
     duration   = models.DurationField()
        
     def __str__(self):
         return self.name
+
+    def modified_duration(self):
+        return self.duration.days
+
+    def invest_now(self):
+        return reverse('invest-now', kwargs={'pk': self.pk})
 
 
 class Investment(models.Model):

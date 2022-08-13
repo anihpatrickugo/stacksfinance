@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+from cmath import e
 import os
 from pathlib import Path
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'crispy_forms',
+    'anymail',
     
     'core.apps.CoreConfig',
 ]
@@ -50,9 +52,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 SITE_ID = 1
 
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCONT_LOGIN_ON_PASSWORD_RESET = True
+DEFAULT_FROM_EMAIL = 'ugocee.pvu@gmail.com'
+
 
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
@@ -173,13 +179,50 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# email smtp settings
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.mail.yahoo.com'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'iampatrickugo@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Password_1999' 
+
+# 1bb00ab446
+# aa0997a8aa7530bef851a0fd00791293-us10
+
+# EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
+# EMAIL_HOST = 'in-v3.mailjet.com'
+# MAILJET_API_KEY = 'd39cc2ecbab875ae2681df11b925fd58'
+# MAILJET_API_SECRET = 'f8758e13b9ca950d6e519f96153338cf'
+# EMAIL_PORT = '587'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+
+# DEFAULT_FROM_EMAIL = 'ugochukwu <ugocee.pvu@gmail.com.'
+
+
+# MAILCHIMP_API_KEY = 'aa0997a8aa7530bef851a0fd00791293-us10'
+# MAILCHIMP_DATA_CENTER = 's10'
+# MAILCHIMP_EMAIL_LIST_ID = '1bb00ab446'
+
+EMAIL_BACKEND = 'anymail.backends.mailjet.EmailBackend'
+
+ANYMAIL = {
+    'MAILJET_API_KEY': 'd39cc2ecbab875ae2681df11b925fd58',
+    'MAILJET_SECRET_KEY': 'f8758e13b9ca950d6e519f96153338cf',
+}
 
 
 
 # site settings
 
-BITCOIN_ADDRESS = 'ggggggggggggggg'
-
+BITCOIN_ADDRESS = 'bc1qm0h7z8dy9wjn3n5yztn80n9fp4pjx2djmczzrx'
+SITE_REFERRAL_BONUS = 10
+MINIMUM_WITHDRAWAL_AMAOUNT = 5
+WEBSITE_DEFAULT_SENDER_EMAIL = 'ugocee.pvu@gmail.com'
+WEBSITE_ADMIN_EMAILS = ['iampatrickugo@gmail.com']

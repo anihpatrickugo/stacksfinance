@@ -1,27 +1,62 @@
-from cProfile import label
-from email.policy import default
-from re import M
+
+
 from allauth.account.forms import SignupForm
+from django_countries.fields import CountryField
+
 from django import forms
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
+from django.conf import settings
+
 from .models import *
 
 
-class SimpleSignupForm(SignupForm):
-    first_name = forms.CharField(max_length=40, label='First name')
-    last_name = forms.CharField(max_length=40, label='Last name')
 
+class SimpleSignupForm(SignupForm):
+    first_name      = forms.CharField(max_length=40)
+    last_name       = forms.CharField(max_length=40)
+    nationality     = CountryField(blank_label= 'Select country').formfield()
     bitcoin_address = forms.CharField(max_length=40, label='Bitcoin Address')
-   
-    def save(self, request):
-        user = super(SimpleSignupForm, self).save(request)
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-        user.bitcoin_address = self.cleaned_data['bitcoin_address']
+    referral_code   = forms.CharField(max_length=6, label='Referral Code', required=False, widget=forms.TextInput(attrs={'placeholder': '--optional--'}))
         
+
+    def clean_referral_code(self):
+        code = self.cleaned_data['referral_code']
+        referrer = Profile.objects.filter(referral_code=code)
+
+        if code != "":
+             if referrer.exists():
+                pass
+             else:
+                raise forms.ValidationError("Referral code does not exist")
+
+        return code
+
+    def save(self, *args, **kwargs):
+        user = super().save(*args, **kwargs)
+
+        code            = self.cleaned_data['referral_code']
+        nationality     = self.cleaned_data['nationality']
+        bitcoin_address = self.cleaned_data['bitcoin_address']
+        
+
+        if code != '':
+            referrer = Profile.objects.get(referral_code=code)
+
+            make_referrals = Referrals.objects.create(referred_by=referrer, referred=user)
+            make_referrals.save()
+        
+        user.nationality = nationality
+        user.bitcoin_address = bitcoin_address
         user.save()
         return user
-    
+   
 
+    
+   
+   
 class DepositForm(forms.ModelForm):
     bitcoin_value = forms.CharField(disabled=True, widget=forms.TextInput(attrs={'id': 'bitcoin_value'}))
 
@@ -39,6 +74,25 @@ class DepositForm(forms.ModelForm):
         self.fields['bitcoin_value'].initial = self.fields['amount'].initial
 
 
+   
 
 
-    
+
+
+
+class ContactForm(forms.Form):
+    name     = forms.CharField(widget=forms.TextInput(attrs={'id': 'name', 'placeholder': 'Your Name', 'class': 'form-control'}))
+    email    = forms.EmailField(widget=forms.TextInput(attrs={'id': 'emai', 'placeholder': 'Your Email', 'class': 'form-control'}))
+    subject  = forms.CharField(widget=forms.TextInput(attrs={'id': 'subject',  'placeholder': 'Subject', 'class': 'form-control'}))
+    message  = forms.CharField(widget=forms.Textarea(attrs={'id': 'message',  'placeholder': 'Message', 'class': 'form-control'}))
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        if  '@' not in email:
+
+            print("incorect email format")
+            messages.error(self.request, 'incorrect email format')
+            raise forms.ValidationError('incorrect email format')
+        
+        return email

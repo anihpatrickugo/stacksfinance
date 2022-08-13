@@ -10,20 +10,23 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="info-box card">
-              <h3>
-                Pay your desired amount to the bitcoin address below and submit
-                your transanction hash.
+              <h3 style="color: green;">
+                Pay your desired amount to this bitcoin address and submit
+                your amount paid and transanction hash to the form below.
               </h3>
             </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-9">
             <div class="info-box card">
-              <h6>Bitcoin Address:</h6>
-              <p><strong>{{ wallet_address }}</strong></p>
-              <input onclick="copyText()" type="button" value="copy" id="myButton1" class="btn-primary"/>
+              <h3><span style="font-weight: 5;">Bitcoin Address:  </span>{{ wallet_address }}</h3>
+              <br>
+              <br>
+              <input onclick="copyText()" type="button" value="copy bitcoin wallet address" id="myButton1" class="btn-primary"/>
+              <br>
+              <br>
             </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-3">
             <div class="info-box card">
               <img src="{% static 'core/img/qrcode.png' %}" />
               <p>Scan Qrcode</p>
@@ -62,6 +65,7 @@
         var result = x / {{ bitcoin_price }}
 
         document.getElementById('bitcoin_value').value = result;
+        
     }
 
     function copyText() {
@@ -69,6 +73,7 @@
                   navigator.clipboard.writeText("{{wallet_address}}");
 
                   document.getElementById("myButton1").value = "Copied";
+                  
                 }
    </script>
   
