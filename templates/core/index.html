@@ -264,7 +264,7 @@
 
               <ul>
                 <li><strong style="color: #106eea">Min: </strong>${{ plan.min_amount }}</li>
-                <li><strong style="color: #106eea">Max: </strong> {% if plan.max_amount %} ${{ plan.max_amount }} {% else %} Unlimited {% endif %}</li>
+                <li><strong style="color: #106eea">Max: </strong> {% if plan.max_amount != 0 %} ${{ plan.max_amount }} {% else %} Unlimited {% endif %}</li>
                 <li>$10 Referral Bonus</li>
                 <li>Instant Withdrawal</li>
                

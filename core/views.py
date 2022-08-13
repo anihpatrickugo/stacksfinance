@@ -84,8 +84,8 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context['investments'] = Investment.objects.filter(user=self.request.user)
         context['referrals'] = Referrals.objects.filter(referred_by=self.request.user, paid=True)
 
-        deposit_total    = Deposit.objects.filter(user=self.request.user).values_list('amount', flat=True)
-        withdrawal_total = Withdrawal.objects.filter(user=self.request.user).values_list('amount', flat=True)
+        deposit_total    = Deposit.objects.filter(user=self.request.user, verfified=True).values_list('amount', flat=True)
+        withdrawal_total = Withdrawal.objects.filter(user=self.request.user, verfified=True).values_list('amount', flat=True)
         investment_total = Investment.objects.filter(user=self.request.user).values_list('amount', flat=True)
         referral_total   = Referrals.objects.filter(referred_by=self.request.user, paid=True).count()
         
