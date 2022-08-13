@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 from cmath import e
 import os
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -226,3 +227,7 @@ SITE_REFERRAL_BONUS = 10
 MINIMUM_WITHDRAWAL_AMAOUNT = 5
 WEBSITE_DEFAULT_SENDER_EMAIL = 'ugocee.pvu@gmail.com'
 WEBSITE_ADMIN_EMAILS = ['iampatrickugo@gmail.com']
+
+
+
+django_heroku.settings(locals())
