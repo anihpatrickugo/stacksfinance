@@ -2,6 +2,7 @@
 import datetime
 
 from django_countries.fields import CountryField
+from cloudinary.models import CloudinaryField
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User
@@ -12,28 +13,22 @@ from django.conf import settings
 from django.urls import reverse
 
 
-
-
-
-
-
 # Create your models here.
 
 class Profile(AbstractUser):
     bitcoin_address = models.CharField(max_length=40)
-    photo           = models.ImageField(upload_to='profile_photos', null=True, blank=True)
-    balance         = models.PositiveIntegerField(default=0)
-    nationality     = CountryField(blank_label='select country')
-    referral_code   = models.CharField(max_length=6, unique=True, blank=True, null=True)
+    # photo = models.ImageField(upload_to='profile_photos', null=True, blank=True)
+    photo = CloudinaryField('profile_photos')
+    balance = models.PositiveIntegerField(default=0)
+    nationality = CountryField(blank_label='select country')
+    referral_code = models.CharField(max_length=6, unique=True, blank=True, null=True)
 
-    
-   
 
 class Referrals(models.Model):
-    referred_by =  models.ForeignKey(Profile, on_delete=models.CASCADE)
-    referred    =  models.OneToOneField(Profile, related_name='owner', on_delete=models.CASCADE)
-    paid        =  models.BooleanField(default=False)
-    date        =  models.DateTimeField(auto_now_add=True)
+    referred_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    referred = models.OneToOneField(Profile, related_name='owner', on_delete=models.CASCADE)
+    paid = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'referral'

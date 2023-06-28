@@ -11,8 +11,18 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 from cmath import e
 import os
-import django_heroku
+import environ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from pathlib import Path
+
+env = environ.Env(
+    DEBUG=(bool, True)
+)
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +35,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-l+cs9_y#h449-#acu6b1rh4s9j8^xms%-$0h!g3sy%o0ut@p35'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['stacksfinance.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,7 +54,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'crispy_forms',
-    'anymail',
+    "cloudinary",
     
     'core.apps.CoreConfig',
 ]
@@ -57,7 +67,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCONT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 DEFAULT_FROM_EMAIL = 'ugocee.pvu@gmail.com'
 
 
@@ -109,11 +119,24 @@ WSGI_APPLICATION = 'stacksfinance.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+# Production Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "HOST": "db.iblprrtzyerrvhwqnnpj.supabase.co",
+        "NAME": env('DATABASE_NAME'),
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "PORT": "5432"
+    },
 }
 
 
@@ -153,7 +176,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -165,8 +188,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -185,38 +208,29 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.mail.yahoo.com'
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'iampatrickugo@gmail.com'
-# EMAIL_HOST_PASSWORD = 'Password_1999' 
-
-# 1bb00ab446
-# aa0997a8aa7530bef851a0fd00791293-us10
-
-# EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
-# EMAIL_HOST = 'in-v3.mailjet.com'
-# MAILJET_API_KEY = 'd39cc2ecbab875ae2681df11b925fd58'
-# MAILJET_API_SECRET = 'f8758e13b9ca950d6e519f96153338cf'
-# EMAIL_PORT = '587'
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-
-# DEFAULT_FROM_EMAIL = 'ugochukwu <ugocee.pvu@gmail.com.'
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 
-# MAILCHIMP_API_KEY = 'aa0997a8aa7530bef851a0fd00791293-us10'
-# MAILCHIMP_DATA_CENTER = 's10'
-# MAILCHIMP_EMAIL_LIST_ID = '1bb00ab446'
 
-EMAIL_BACKEND = 'anymail.backends.mailjet.EmailBackend'
 
-ANYMAIL = {
-    'MAILJET_API_KEY': 'd39cc2ecbab875ae2681df11b925fd58',
-    'MAILJET_SECRET_KEY': 'f8758e13b9ca950d6e519f96153338cf',
-}
+# ANYMAIL = {
+#     'MAILJET_API_KEY': 'd39cc2ecbab875ae2681df11b925fd58',
+#     'MAILJET_SECRET_KEY': 'f8758e13b9ca950d6e519f96153338cf',
+# }
+
+#cloudinary integration
+
+cloudinary.config(
+    cloud_name=env('CLOUDINARY_NAME'),
+    api_key=env('CLOUDINARY_API_KEY'),
+    api_secret=env('CLOUDINARY_API_SECRET'),
+)
 
 
 
@@ -225,9 +239,8 @@ ANYMAIL = {
 BITCOIN_ADDRESS = 'bc1qm0h7z8dy9wjn3n5yztn80n9fp4pjx2djmczzrx'
 SITE_REFERRAL_BONUS = 10
 MINIMUM_WITHDRAWAL_AMAOUNT = 5
-WEBSITE_DEFAULT_SENDER_EMAIL = 'ugocee.pvu@gmail.com'
+WEBSITE_DEFAULT_SENDER_EMAIL = DEFAULT_FROM_EMAIL
 WEBSITE_ADMIN_EMAILS = ['iampatrickugo@gmail.com']
 
 
 
-django_heroku.settings(locals())
