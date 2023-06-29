@@ -58,11 +58,16 @@
   <script>
     var num1 = document.getElementById("amount") 
 
-    function mult() {
-        var x = parseFloat(num1.value);
+    async function mult() {
+        const req = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
+        const data = await req.json()
+        const price = data['price']
+
+        const x = parseFloat(num1.value);
         if (isNaN(x)) x = 0;
 
-        var result = x / {{ bitcoin_price }}
+        const result = x / price
+
 
         document.getElementById('bitcoin_value').value = result;
         

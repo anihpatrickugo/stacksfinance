@@ -17,7 +17,6 @@ from django.template.loader import render_to_string
 
 
 from .forms import DepositForm, ContactForm
-from .utils import get_crypto_price
 from .models import (
     Investment, 
     Profile, 
@@ -120,7 +119,6 @@ class UserNewDepositView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['wallet_address'] = settings.BITCOIN_ADDRESS
-        context['bitcoin_price'] = get_crypto_price()
         return context
     
 

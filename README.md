@@ -4,7 +4,7 @@ StacksFiance is an investment platform that offers users
 investnment returns for a certain duration. It supports
 the best intrest and referral system.
 
-[Go To Website](https://stacksfinance.vercel.app/)
+[Go To Website](https://https://stacksfinance-69c0.onrender.com/)
 
 ## Installation
 1. clone the repository with the following command:
