@@ -36,13 +36,13 @@
                 </div>
 
 
-                <form method="post" action="{% url 'account_logout' %}">
+                <form method="post" action="{% url 'account_logout' %}" style="display: flex; justify-content:space-evenly" />
                   {% csrf_token %}
                   {% if redirect_field_value %}
                   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                   {% endif %}
-                  <button class="btn btn-primary w-40" type="submit">{% trans "Sign Out" %}</button>
-                  <a href="/" class="btn btn-danger w-40"> Back</a>
+                  <button class="btn btn-primary w-40" type="submit">{% trans "Yes" %}</button>
+                  <a href="/" class="btn btn-danger w-40">No</a>
                 </form>
 
               </div>

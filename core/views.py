@@ -278,7 +278,7 @@ class UserReferralsView(LoginRequiredMixin, ListView):
 
 class UserSettingsView(LoginRequiredMixin, UpdateView):
     model = Profile
-    fields = ['photo', 'first_name', 'last_name', 'username', 'bitcoin_address', 'nationality']
+    fields = ['photo', 'first_name', 'last_name', 'username', 'bitcoin_address', 'nationality', 'date_of_birth']
     template_name = 'account/account-settings.html'
     success_url = reverse_lazy('user-profile')
 

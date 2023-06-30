@@ -21,7 +21,14 @@ class Profile(AbstractUser):
     photo = CloudinaryField('profile_photos')
     balance = models.PositiveIntegerField(default=0)
     nationality = CountryField(blank_label='select country')
+    date_of_birth = models.DateField(null=True)
     referral_code = models.CharField(max_length=6, unique=True, blank=True, null=True)
+
+    @property
+    def age(self):
+        dob = self.date_of_birth
+        age = datetime.date.today() - dob
+        return int(age.days / 356.25)
 
 
 class Referrals(models.Model):

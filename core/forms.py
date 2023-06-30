@@ -1,5 +1,4 @@
 
-
 from allauth.account.forms import SignupForm
 from django_countries.fields import CountryField
 
@@ -11,6 +10,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from .models import *
+from .validators import age_validator
 
 
 
@@ -18,8 +18,18 @@ class SimpleSignupForm(SignupForm):
     first_name      = forms.CharField(max_length=40)
     last_name       = forms.CharField(max_length=40)
     nationality     = CountryField(blank_label= 'Select country').formfield()
+    date_of_birth   = forms.DateField(label='Date of Birth',
+                                      validators= [age_validator],
+                                      initial= datetime.date.today(),
+                                      widget=forms.widgets.DateInput(attrs={
+                                          'type': 'date'}))
     bitcoin_address = forms.CharField(max_length=40, label='Bitcoin Address')
-    referral_code   = forms.CharField(max_length=6, label='Referral Code', required=False, widget=forms.TextInput(attrs={'placeholder': '--optional--'}))
+    referral_code   = forms.CharField(max_length=6, label='Referral Code', required=False,
+                                      widget=forms.TextInput(attrs={'placeholder': '--optional--'}))
+
+
+    field_order = ['username', 'first_name', 'last_name', 'email', 'nationality',
+                   'date_of_birth', 'bitcoin_address', 'referral_code']
         
 
     def clean_referral_code(self):
@@ -39,6 +49,7 @@ class SimpleSignupForm(SignupForm):
 
         code            = self.cleaned_data['referral_code']
         nationality     = self.cleaned_data['nationality']
+        date_of_birth   = self.cleaned_data['date_of_birth']
         bitcoin_address = self.cleaned_data['bitcoin_address']
         
 
@@ -49,6 +60,8 @@ class SimpleSignupForm(SignupForm):
             make_referrals.save()
         
         user.nationality = nationality
+        user.date_of_birth = date_of_birth
+        print(date_of_birth)
         user.bitcoin_address = bitcoin_address
         user.save()
         return user
