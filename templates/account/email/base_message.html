@@ -1,0 +1,10 @@
+{% extends "core/index.html" %}
+{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name %}Hello from {{ site_name }}!{% endblocktrans %}
+
+{% block content %}
+
+{% endblock %}
+
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you for Investing with us!
+{% endblocktrans %}
+{% endautoescape %}

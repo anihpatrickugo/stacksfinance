@@ -1,5 +1,5 @@
 
-{% extends "core/index.html" %}
+{% extends "account/logout.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load i18n %}
@@ -8,28 +8,12 @@
 {% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
 
 
-{% block content %}
-    <main>
-        <div class="container">
-      
-          <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-      
-                  <div class="d-flex justify-content-center py-4">
-                    <a href="" class="logo d-flex align-items-center w-auto">
-                      <img src="{% static 'core/img/logo.png' %}" alt="">
-                      <span class="d-none d-lg-block">Stacks Finance</span>
-                    </a>
-                  </div><!-- End Logo -->
-      
-                
-                <h1>{% trans "Confirm E-mail Address" %}</h1>
+{% block card_body %}
+    <h1>{% trans "Confirm E-mail Address" %}</h1>
 
                 {% if confirmation %}
 
-                  
+
 
                    <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
 
@@ -47,15 +31,5 @@
                 {% endif %}
 
 
-      
-        
-                </div>
-              </div>
-            </div>
-      
-          </section>
-      
-        </div>
-      </main><!-- End #main -->
       
 {% endblock %}
